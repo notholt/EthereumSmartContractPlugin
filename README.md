@@ -13,3 +13,5 @@ To generate the abi and bin you may use remix
 https://remix.ethereum.org/
 
 For further questions contact Prof. Notholt
+
+**This is a Netbeans Java Project with MAVEN**
