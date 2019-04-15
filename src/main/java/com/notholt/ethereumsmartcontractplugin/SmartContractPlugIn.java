@@ -26,6 +26,9 @@ import java.util.logging.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.exceptions.TransactionException;
@@ -107,7 +110,7 @@ public class SmartContractPlugIn extends TimerTask{
         
         try
         {
-            web3  = Web3j.build(new HttpService("http://localhost:8042/"));  // defaults to http://localhost:8545/
+            web3  = Web3j.build(new HttpService("https://rinkeby.infura.io"));  // defaults to http://localhost:8545/
             Web3ClientVersion web3ClientVersion = web3.web3ClientVersion().send();
             String clientVersion = web3ClientVersion.getWeb3ClientVersion();
            
@@ -119,8 +122,9 @@ public class SmartContractPlugIn extends TimerTask{
             //System.out.printf("Path to wallet: %s \n", walletName);
            // Credentials credentials = WalletUtils.loadCredentials("mexico", "./wallet/"+walletName);
             credentials  = WalletUtils.loadCredentials(walletPass, walletPath);
+            BigInteger  balance = web3.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST).send().getBalance();
            
-            System.out.printf("Account key = %s",credentials.getAddress());
+            System.out.printf("Account key = %s, BALANCE = %f Gwei\n",credentials.getAddress(), balance.doubleValue()/1e9);
             
             
 
@@ -228,7 +232,7 @@ public class SmartContractPlugIn extends TimerTask{
         System.out.println("TimerTask started");
         //cancel after sometime
         try {
-            Thread.sleep(1200000);
+            Thread.sleep(7200000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
